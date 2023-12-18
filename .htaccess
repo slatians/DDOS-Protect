@@ -1,0 +1,39 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{HTTP_USER_AGENT} (AhrefsBot|MJ12bot|wget|curl|python|nikto|sqlmap|Scrapy|ZmEu|Morfeus|WinHTTP) [NC]
+    RewriteRule .* - [F,L]
+
+    RewriteCond %{REQUEST_URI} ^/(index\.php|index\.html|index\.htm|robots\.txt|favicon\.ico)
+    RewriteCond %{HTTP_COOKIE} !^.*cookie-name=.*$
+    RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.1$
+    RewriteCond %{REMOTE_ADDR} !^123\.45\.67\.89$
+    RewriteCond %{HTTP:Via} !^1\.1\s+vegur$
+    RewriteCond %{REQUEST_METHOD} ^(POST|GET)$
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?yourdomain\.net [NC]
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteRule .* - [F,L]
+
+    RewriteCond %{REMOTE_ADDR} ^(?:123\.45\.67\.89|98\.76\.54\.32)$
+    RewriteCond %{REQUEST_URI} !^/maintenance\.html$
+    RewriteRule ^(.*)$ /maintenance.html [R=307,L]
+</IfModule>
+<IfModule mod_evasive20.c>
+    DOSHashTableSize 10240
+    DOSPageCount 5
+    DOSSiteCount 50
+    DOSPageInterval 1
+    DOSSiteInterval 1
+    DOSBlockingPeriod 60
+    DOSLogDir "/var/log/mod_evasive"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{QUERY_STRING} port(=|%3D)[0-9]+ [NC,OR]
+    RewriteCond %{QUERY_STRING} (\;|\*|\"|<|>|\|)+ [NC,OR]
+    RewriteCond %{QUERY_STRING} (drop|select|insert|delete|update|alter|create|shutdown|grant) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
